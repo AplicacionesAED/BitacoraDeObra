@@ -228,9 +228,11 @@ export default function DetalleBitacoraPage() {
         (ut: any) => ut.usuario?.tipoUsuario === 'interventoria' || ut.usuario?.tipoUsuario === 'supervisor_tecnico'
     )?.usuario;
 
-    const residentesAsignados: any[] = (bitacora.torre?.usuarioTorres ?? [])
-        .filter((ut: any) => ut.usuario?.tipoUsuario === 'residente_obra')
-        .map((ut: any) => ut.usuario);
+    // El Residente de Obra que se muestra es quien REALMENTE creó/envió esta
+    // bitácora (bitacora.creadoPor, snapshot persistido en creadoPorUsuarioId),
+    // no quien esté asignado HOY a la torre -- ese dato cambia con el tiempo y
+    // no debe alterar un registro ya enviado.
+    const residenteCreador = bitacora.creadoPor;
 
     return (
         <div className="max-w-6xl mx-auto animate-fadeIn px-2 sm:px-0 pb-10">
@@ -408,15 +410,11 @@ export default function DetalleBitacoraPage() {
                             <User className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
                             <div>
                                 <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Residente de Obra</span>
-                                {residentesAsignados.length > 0 ? (
-                                    <div className="flex flex-col gap-0.5 mt-0.5">
-                                        {residentesAsignados.map((r: any) => (
-                                            <span key={r.id} className="font-semibold text-slate-700 text-xs inline-flex items-center gap-1.5">
-                                                {r.nombre} {r.apellido}
-                                                <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex justify-center text-[9px] leading-tight font-bold flex-col items-center shrink-0">{r.nombre?.charAt(0)}{r.apellido?.charAt(0)}</span>
-                                            </span>
-                                        ))}
-                                    </div>
+                                {residenteCreador ? (
+                                    <span className="font-semibold text-slate-700 text-xs inline-flex items-center gap-1.5 mt-0.5">
+                                        {residenteCreador.nombre} {residenteCreador.apellido}
+                                        <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex justify-center text-[9px] leading-tight font-bold flex-col items-center shrink-0">{residenteCreador.nombre?.charAt(0)}{residenteCreador.apellido?.charAt(0)}</span>
+                                    </span>
                                 ) : (
                                     <span className="font-semibold text-slate-400 text-xs italic">No asignado</span>
                                 )}
