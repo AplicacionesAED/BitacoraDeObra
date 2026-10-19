@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { prepareImageForUpload } from '../lib/imageCompression';
+import FilePreviewImg from './FilePreviewImg';
 import { X, Camera, Upload, CheckCircle2 } from 'lucide-react';
 
 interface Props {
@@ -57,7 +58,7 @@ export default function EnsayoModal({ onClose, onSave, initialData }: Props) {
                         </label>
                         {isEditing && initialData?.anexoFoto && !anexoFoto && (
                             <div className="mb-3 w-24 h-24 rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
-                                <img src={URL.createObjectURL(initialData.anexoFoto)} className="w-full h-full object-cover" />
+                                <FilePreviewImg file={initialData.anexoFoto} className="w-full h-full object-cover" />
                             </div>
                         )}
                         <label className={`flex flex-col items-center justify-center gap-3 px-4 py-10 bg-slate-50 border-2 border-dashed rounded-xl cursor-pointer hover:bg-slate-100 transition-all ${anexoFoto ? 'border-emerald-400 bg-emerald-50/30' : 'border-slate-300 hover:border-slate-400 group'}`}>

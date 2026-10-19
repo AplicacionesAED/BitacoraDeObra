@@ -5,6 +5,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useProjectStore } from '../stores/projectStore';
 import api from '../lib/api';
 import ActividadModal from '../components/ActividadModal';
+import FilePreviewImg from '../components/FilePreviewImg';
 import FirmaDigital from '../components/FirmaDigital';
 import { prepareImageForUpload } from '../lib/imageCompression';
 import { getFriendlyError } from '../lib/errorMessage';
@@ -524,13 +525,13 @@ export default function RegistrarBitacoraPage() {
                                                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                                                 {act.foto1 && (
                                                                     <figure className="relative rounded-xl overflow-hidden border border-amber-200 shadow-sm bg-amber-100">
-                                                                        <img src={URL.createObjectURL(act.foto1)} className="w-full h-24 object-cover" />
+                                                                        <FilePreviewImg file={act.foto1} className="w-full h-24 object-cover" />
                                                                         <figcaption className="absolute bottom-1 left-1 text-[9px] font-bold bg-amber-900/70 text-white px-1.5 rounded">FOTO 1</figcaption>
                                                                     </figure>
                                                                 )}
                                                                 {act.foto2 && (
                                                                     <figure className="relative rounded-xl overflow-hidden border border-amber-200 shadow-sm bg-amber-100">
-                                                                        <img src={URL.createObjectURL(act.foto2)} className="w-full h-24 object-cover" />
+                                                                        <FilePreviewImg file={act.foto2} className="w-full h-24 object-cover" />
                                                                         <figcaption className="absolute bottom-1 left-1 text-[9px] font-bold bg-amber-900/70 text-white px-1.5 rounded">FOTO 2</figcaption>
                                                                     </figure>
                                                                 )}
@@ -593,13 +594,13 @@ export default function RegistrarBitacoraPage() {
                                                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                                             {act.foto1 && (
                                                                 <figure className="relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100">
-                                                                    <img src={URL.createObjectURL(act.foto1)} className="w-full h-24 object-cover" />
+                                                                    <FilePreviewImg file={act.foto1} className="w-full h-24 object-cover" />
                                                                     <figcaption className="absolute bottom-1 left-1 text-[9px] font-bold bg-slate-900/60 text-white px-1.5 rounded">FOTO 1</figcaption>
                                                                 </figure>
                                                             )}
                                                             {act.foto2 && (
                                                                 <figure className="relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100">
-                                                                    <img src={URL.createObjectURL(act.foto2)} className="w-full h-24 object-cover" />
+                                                                    <FilePreviewImg file={act.foto2} className="w-full h-24 object-cover" />
                                                                     <figcaption className="absolute bottom-1 left-1 text-[9px] font-bold bg-slate-900/60 text-white px-1.5 rounded">FOTO 2</figcaption>
                                                                 </figure>
                                                             )}
@@ -748,7 +749,7 @@ export default function RegistrarBitacoraPage() {
                                             <div className="flex gap-4">
                                                 <div className="w-16 h-16 rounded-lg bg-white border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-300">
                                                     {ens.anexoFoto
-                                                        ? <img src={URL.createObjectURL(ens.anexoFoto)} className="w-full h-full object-cover" />
+                                                        ? <FilePreviewImg file={ens.anexoFoto} className="w-full h-full object-cover" />
                                                         : <FlaskConical className="w-7 h-7" />}
                                                 </div>
                                                 <div>
