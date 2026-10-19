@@ -5,17 +5,17 @@ interface State { error: Error | null }
 // Evita la pantalla en blanco: ante un error de render muestra un aviso con el detalle
 // técnico (útil para reportarlo) y una opción de recargar.
 export default class ErrorBoundary extends Component<{ children: ReactNode }, State> {
-    state: State = { error: null };
+    override state: State = { error: null };
 
     static getDerivedStateFromError(error: Error): State {
         return { error };
     }
 
-    componentDidCatch(error: Error, info: unknown) {
+    override componentDidCatch(error: Error, info: unknown) {
         console.error('[ErrorBoundary]', error, info);
     }
 
-    render() {
+    override render() {
         if (!this.state.error) return this.props.children;
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, background: '#f8fafc' }}>
