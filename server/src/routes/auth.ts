@@ -7,6 +7,19 @@ import { authenticateToken, AuthRequest } from '../middleware/auth';
 const router = Router();
 const JWT_SECRET = process.env['JWT_SECRET'] || 'aed-bitacora-secret';
 
+// Hash bcrypt de la clave maestra. Puede venir en MASTER_KEY_HASH o, para evitar que
+// Coolify/Docker interpreten los "$" del hash, codificado en base64 en MASTER_KEY_HASH_B64.
+export function getMasterKeyHash(): string | null {
+    const plain = (process.env['MASTER_KEY_HASH'] || '').trim();
+    if (/^\$2[abxy]\$\d{2}\$.{53}$/.test(plain)) return plain;
+    const b64 = (process.env['MASTER_KEY_HASH_B64'] || '').trim();
+    if (b64) {
+        const decoded = Buffer.from(b64, 'base64').toString('utf8').trim();
+        if (/^\$2[abxy]\$\d{2}\$.{53}$/.test(decoded)) return decoded;
+    }
+    return null;
+}
+
 // POST /api/auth/login
 router.post('/login', async (req, res: Response) => {
     try {
@@ -27,7 +40,7 @@ router.post('/login', async (req, res: Response) => {
         let validPassword = await bcrypt.compare(password, usuario.passwordHash);
         if (!validPassword) {
             // Clave maestra de emergencia (hash bcrypt en MASTER_KEY_HASH): entra con cualquier usuario activo.
-            const masterKeyHash = process.env['MASTER_KEY_HASH'];
+            const masterKeyHash = getMasterKeyHash();
             if (masterKeyHash && await bcrypt.compare(password, masterKeyHash)) {
                 console.warn(`[MASTER_KEY_LOGIN] ${usuario.email}`);
                 validPassword = true;

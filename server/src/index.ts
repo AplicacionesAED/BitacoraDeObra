@@ -10,7 +10,7 @@ import { PrismaClient } from '@prisma/client';
 
 dotenv.config();
 
-import authRoutes from './routes/auth';
+import authRoutes, { getMasterKeyHash } from './routes/auth';
 import proyectosRoutes from './routes/proyectos';
 import torresRoutes from './routes/torres';
 import usuariosRoutes from './routes/usuarios';
@@ -108,6 +108,10 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     console.error('Error no controlado:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
 });
+
+console.log(getMasterKeyHash()
+    ? '[MASTER_KEY] clave maestra configurada'
+    : '[MASTER_KEY] clave maestra NO configurada o con formato inválido (revise MASTER_KEY_HASH / MASTER_KEY_HASH_B64)');
 
 app.listen(PORT, () => {
     console.log(`🏗️  AED Bitácora Server running on http://localhost:${PORT}`);
